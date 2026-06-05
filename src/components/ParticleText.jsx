@@ -93,9 +93,9 @@ export default function ParticleText({ text, width = 780, height = 540 }) {
 
         if (dist < radius) {
           const angle = Math.atan2(dy, dx);
-          const pushForce = (radius - dist) / radius * force;
-          p.vx -= Math.cos(angle) * pushForce;
-          p.vy -= Math.sin(angle) * pushForce;
+          const pullForce = (radius - dist) / radius * force;
+          p.vx += Math.cos(angle) * pullForce;
+          p.vy += Math.sin(angle) * pullForce;
         }
 
         // Spring back to origin
