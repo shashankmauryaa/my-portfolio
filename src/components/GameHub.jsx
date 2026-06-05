@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 export default function GameHub({ onNavigate }) {
   const [charX, setCharX] = useState(50);
+  const [charY, setCharY] = useState(50);
   const [facing, setFacing] = useState('right');
   const [keysDown, setKeysDown] = useState(new Set());
 
@@ -12,10 +13,11 @@ export default function GameHub({ onNavigate }) {
   ];
 
   const moveSpeed = 1.2;
+  const movementKeys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'a', 'd', 'w', 's', 'A', 'D', 'W', 'S'];
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (['ArrowLeft', 'ArrowRight', 'a', 'd', 'A', 'D'].includes(e.key)) {
+      if (movementKeys.includes(e.key)) {
         e.preventDefault();
         setKeysDown((prev) => new Set(prev).add(e.key));
       }
@@ -42,6 +44,7 @@ export default function GameHub({ onNavigate }) {
 
     let frame;
     const step = () => {
+      // Horizontal movement
       setCharX((prev) => {
         let next = prev;
         if (keysDown.has('ArrowLeft') || keysDown.has('a') || keysDown.has('A')) {
@@ -52,8 +55,21 @@ export default function GameHub({ onNavigate }) {
           next += moveSpeed;
           setFacing('right');
         }
-        return Math.max(5, Math.min(95, next));
+        return Math.max(0, Math.min(100, next));
       });
+
+      // Vertical movement
+      setCharY((prev) => {
+        let next = prev;
+        if (keysDown.has('ArrowUp') || keysDown.has('w') || keysDown.has('W')) {
+          next -= moveSpeed;
+        }
+        if (keysDown.has('ArrowDown') || keysDown.has('s') || keysDown.has('S')) {
+          next += moveSpeed;
+        }
+        return Math.max(0, Math.min(100, next));
+      });
+
       frame = requestAnimationFrame(step);
     };
 
@@ -75,7 +91,7 @@ export default function GameHub({ onNavigate }) {
           src="/character.png"
           alt="Pixel art character of Shashank Maurya"
           className={`hub-character ${facing === 'left' ? 'flip' : ''}`}
-          style={{ left: `calc(${charX}% - 60px)`, top: '10px' }}
+          style={{ left: `calc(${charX}% - 60px)`, top: `calc(${charY}% - 60px)` }}
           width="120"
         />
       </div>
