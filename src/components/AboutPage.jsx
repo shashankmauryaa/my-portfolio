@@ -8,19 +8,15 @@ export default function AboutPage({ onNavigate }) {
       <div className="about-page">
         <div className="about-content">
           <p className="about-intro">Hi, my name is Shashank Maurya.</p>
-          <p className="about-tagline">I build things that scale.</p>
+          <p className="about-tagline">I create things.</p>
           <p className="about-body">
-            I am a Software Engineer at Dell Technologies with expertise in
-            DevOps, Python, and full-stack development. I work at the
-            intersection of engineering and innovation — building scalable
-            systems, automating workflows, and crafting clean, performant
-            software.
+            I am a Software Engineer with expertise in DevOps, Python, and full-stack development.
           </p>
           <p className="about-body-secondary">
-            I graduated with 8.97 CGPA in Computer Science from Sikkim Manipal
-            Institute of Technology and have been at Dell ever since — growing
-            from intern to SDE-2. When I&apos;m not shipping code, I&apos;m
-            probably brewing coffee or exploring new tech.
+            I work at the intersection of engineering and innovation — crafting clean, performant software, 
+            automating workflows and building scalable systems.
+            When I&apos;m not building softwares, I&apos;m probably looking for some 
+            inspiration, brewing coffee or touching grass.
           </p>
         </div>
       </div>
