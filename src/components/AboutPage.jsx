@@ -19,8 +19,8 @@ export default function AboutPage({ onNavigate }) {
           <p className="about-body-secondary">
             I graduated with 8.97 CGPA in Computer Science from Sikkim Manipal
             Institute of Technology and have been at Dell ever since — growing
-            from intern to SDE-2. When I&apos;m not getting any insipration, I
-            must be brewing some coffee or tuning to nature.
+            from intern to SDE-2. When I&apos;m not shipping code, I&apos;m
+            probably brewing coffee or exploring new tech.
           </p>
         </div>
       </div>
