@@ -10,7 +10,6 @@ const projects = [
     tech: ['React', 'Node.js', 'MongoDB', 'Socket.io'],
     link: 'https://shashankmauryaa.github.io/LazyAuctions/',
     color: '#6C63FF',
-    image: 'lazy-auctions.png',
   },
   {
     name: 'Strategos',
@@ -18,7 +17,6 @@ const projects = [
     tech: ['Python', 'Flask', 'TensorFlow', 'React'],
     link: 'https://shashankmauryaa.github.io/strategos/',
     color: '#FF6B6B',
-    image: 'strategos.png',
   },
   {
     name: 'Particle Sphere',
@@ -26,7 +24,6 @@ const projects = [
     tech: ['Three.js', 'JavaScript', 'WebGL', 'CSS3'],
     link: 'https://shashankmauryaa.github.io/particle-sphere/',
     color: '#4ECDC4',
-    image: 'particle-sphere.png',
   },
   {
     name: 'This Portfolio',
@@ -34,7 +31,6 @@ const projects = [
     tech: ['React', 'Vite', 'CSS3', 'Canvas'],
     link: 'https://github.com/shashankmauryaa/my-portfolio',
     color: '#F59E0B',
-    image: 'portfolio-thumb.png',
   },
 ];
 
@@ -146,13 +142,6 @@ export default function ProjectsPage({ onNavigate }) {
                   }}
                   onClick={() => handleCardClick(i)}
                 >
-                  {project.image && (
-                    <img
-                      src={`${import.meta.env.BASE_URL}${project.image}`}
-                      alt={`${project.name} preview`}
-                      className="project-card-v2-bg"
-                    />
-                  )}
                   {/* Project visual */}
                   <div className="project-card-v2-visual">
                     <span className="project-card-v2-name">{project.name}</span>
