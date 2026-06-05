@@ -43,7 +43,7 @@ export default function ContactPage({ onNavigate }) {
         {/* Avatar capsule */}
         <div className="contact-avatar-capsule">
           <img
-            src="/avatar.png"
+            src={`${import.meta.env.BASE_URL}avatar.png`}
             alt="Shashank Maurya"
             className="contact-avatar-img"
             width="64"

@@ -40,7 +40,7 @@ export default function LoadingScreen({ onComplete }) {
       </div>
       <p className="loading-percent">{progress}%</p>
       <img
-        src="/character.png"
+        src={`${import.meta.env.BASE_URL}character.png`}
         alt="Pixel art character of Shashank Maurya"
         className="loading-character"
         width="300"

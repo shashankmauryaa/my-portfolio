@@ -11,9 +11,9 @@ export default function GameHub({ onNavigate }) {
   const navigatedRef = useRef(false);
 
   const folders = [
-    { id: 'about', icon: '/folder-blue.png', label: 'About Me' },
-    { id: 'projects', icon: '/folder-red.png', label: 'Projects' },
-    { id: 'contact', icon: '/folder-yellow.png', label: 'Contact Me' },
+    { id: 'about', icon: `${import.meta.env.BASE_URL}folder-blue.png`, label: 'About Me' },
+    { id: 'projects', icon: `${import.meta.env.BASE_URL}folder-red.png`, label: 'Projects' },
+    { id: 'contact', icon: `${import.meta.env.BASE_URL}folder-yellow.png`, label: 'Contact Me' },
   ];
 
   const moveSpeed = 1.5;
@@ -120,7 +120,7 @@ export default function GameHub({ onNavigate }) {
       <div className="hub-character-area">
         <img
           ref={charRef}
-          src="/character.png"
+          src={`${import.meta.env.BASE_URL}character.png`}
           alt="Pixel art character of Shashank Maurya"
           className={`hub-character ${facing === 'left' ? 'flip' : ''} ${isWalking ? 'walking' : ''}`}
           style={{ left: `calc(${charX}% - 60px)`, top: `calc(${charY}% - 60px)` }}
