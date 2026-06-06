@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 export default function GameHub({ onNavigate }) {
-  const [charX, setCharX] = useState(50);
-  const [charY, setCharY] = useState(55);
+  const [charX, setCharX] = useState(window.innerWidth / 2);
+  const [charY, setCharY] = useState(100);
   const [facing, setFacing] = useState('right');
   const [isWalking, setIsWalking] = useState(false);
   const [keysDown, setKeysDown] = useState(new Set());
@@ -16,7 +16,7 @@ export default function GameHub({ onNavigate }) {
     { id: 'contact', icon: `${import.meta.env.BASE_URL}folder-yellow.png`, label: 'Contact Me' },
   ];
 
-  const moveSpeed = 1.5;
+  const moveSpeed = 5;
   const movementKeys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'a', 'd', 'w', 's', 'A', 'D', 'W', 'S'];
 
   useEffect(() => {
@@ -86,7 +86,7 @@ export default function GameHub({ onNavigate }) {
           setFacing('right');
           movedH = true;
         }
-        return Math.max(3, Math.min(97, next));
+        return Math.max(60, Math.min(window.innerWidth - 60, next));
       });
 
       setCharY((prev) => {
@@ -97,7 +97,7 @@ export default function GameHub({ onNavigate }) {
         if (keysDown.has('ArrowDown') || keysDown.has('s') || keysDown.has('S')) {
           next += moveSpeed;
         }
-        return Math.max(0, Math.min(100, next));
+        return Math.max(60, Math.min(window.innerHeight - 60, next));
       });
 
       checkProximity();
@@ -123,7 +123,7 @@ export default function GameHub({ onNavigate }) {
           src={`${import.meta.env.BASE_URL}character.png`}
           alt="Pixel art character of Shashank Maurya"
           className={`hub-character ${facing === 'left' ? 'flip' : ''} ${isWalking ? 'walking' : ''}`}
-          style={{ left: `calc(${charX}% - 60px)`, top: `calc(${charY}% - 60px)` }}
+          style={{ left: `${charX - 60}px`, top: `${charY - 60}px` }}
           width="120"
         />
       </div>
