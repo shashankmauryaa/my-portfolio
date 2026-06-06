@@ -10,6 +10,7 @@ const projects = [
     tech: ['React', 'Node.js', 'MongoDB', 'Socket.io'],
     link: 'https://shashankmauryaa.github.io/LazyAuctions/',
     color: '#6C63FF',
+    image: 'auctions.png',
   },
   {
     name: 'Strategos',
@@ -17,6 +18,7 @@ const projects = [
     tech: ['Python', 'Flask', 'TensorFlow', 'React'],
     link: 'https://shashankmauryaa.github.io/strategos/',
     color: '#FF6B6B',
+    image: 'strategos-gemini.png',
   },
   {
     name: 'Particle Sphere',
@@ -24,15 +26,19 @@ const projects = [
     tech: ['Three.js', 'JavaScript', 'WebGL', 'CSS3'],
     link: 'https://shashankmauryaa.github.io/particle-sphere/',
     color: '#4ECDC4',
+    image: 'particle-sphere.png',
   },
   {
     name: 'This Portfolio',
     desc: 'The very portfolio you are viewing — a video-game-style interactive experience built with React, featuring pixel art, keyboard navigation, and neo-brutalist design.',
     tech: ['React', 'Vite', 'CSS3', 'Canvas'],
-    link: 'https://github.com/shashankmauryaa/my-portfolio',
+    link: 'https://shashankmauryaa.github.io/my-portfolio',
     color: '#F59E0B',
+    image: 'portfolio.png',
   },
 ];
+
+const N = projects.length;
 
 export default function ProjectsPage({ onNavigate }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -53,6 +59,7 @@ export default function ProjectsPage({ onNavigate }) {
     return () => clearTimeout(timer);
   }, [activeIndex]);
 
+  // Infinite scroll — wraps around both directions
   const handleScroll = useCallback((e) => {
     if (scrollCooldown) return;
     const delta = e.deltaY;
@@ -62,46 +69,53 @@ export default function ProjectsPage({ onNavigate }) {
     setTimeout(() => setScrollCooldown(false), 500);
 
     if (delta > 0) {
-      setActiveIndex((prev) => Math.min(prev + 1, projects.length - 1));
+      setActiveIndex((prev) => (prev + 1) % N);
     } else if (delta < 0) {
-      setActiveIndex((prev) => Math.max(prev - 1, 0));
+      setActiveIndex((prev) => (prev - 1 + N) % N);
     }
   }, [scrollCooldown]);
 
-  const getCardStyle = (index) => {
-    const diff = index - activeIndex;
+  // Calculate shortest circular distance from activeIndex to a given index
+  const getCircularDiff = (index) => {
+    let diff = ((index - activeIndex) % N + N) % N;
+    return diff;
+  };
 
-    if (diff < 0) {
-      // Cards that have been scrolled past — hidden below
-      return {
-        opacity: 0,
-        zIndex: 0,
-        transform: `translateY(60px) translateZ(-40px) scale(1.05)`,
-        pointerEvents: 'none',
-      };
-    }
+  const getCardStyle = (index) => {
+    const diff = getCircularDiff(index);
 
     if (diff === 0) {
-      // Active card — front and center at bottom
+      // Active card — front and center
       return {
         opacity: 1,
-        zIndex: projects.length + 1 - diff,
+        zIndex: N + 1,
         transform: 'none',
         pointerEvents: 'auto',
         cursor: 'default',
       };
     }
 
+    // Only show up to 3 cards stacked behind
+    if (diff > 3) {
+      return {
+        opacity: 0,
+        zIndex: 0,
+        transform: `translateY(${-60 * 4}px) translateZ(${-40 * 4}px) scale(${1 - 0.035 * 4})`,
+        pointerEvents: 'none',
+      };
+    }
+
     // Cards behind — stacked upward with perspective
     return {
       opacity: 1,
-      zIndex: projects.length + 1 - diff,
+      zIndex: N + 1 - diff,
       transform: `translateY(${-60 * diff}px) translateZ(${-40 * diff}px) scale(${1 - 0.035 * diff}) rotateX(${-5 * diff}deg)`,
       pointerEvents: 'auto',
       cursor: 'pointer',
     };
   };
 
+  // Clicking a non-active card brings it to front
   const handleCardClick = (index) => {
     if (index === activeIndex) {
       setModal(projects[index]);
@@ -134,7 +148,7 @@ export default function ProjectsPage({ onNavigate }) {
               {projects.map((project, i) => (
                 <div
                   key={project.name}
-                  className="project-card-v2"
+                  className={`project-card-v2 ${i === activeIndex ? 'active' : ''}`}
                   style={{
                     ...getCardStyle(i),
                     backgroundColor: project.color,
@@ -142,7 +156,15 @@ export default function ProjectsPage({ onNavigate }) {
                   }}
                   onClick={() => handleCardClick(i)}
                 >
-                  {/* Project visual */}
+                  {/* Background image */}
+                  {project.image && (
+                    <img
+                      src={`${import.meta.env.BASE_URL}${project.image}`}
+                      alt={`${project.name} preview`}
+                      className="project-card-v2-bg"
+                    />
+                  )}
+                  {/* Project visual content */}
                   <div className="project-card-v2-visual">
                     <span className="project-card-v2-name">{project.name}</span>
                     <div className="project-card-v2-techs">

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 export default function GameHub({ onNavigate }) {
   const [charX, setCharX] = useState(50);
-  const [charY, setCharY] = useState(30);
+  const [charY, setCharY] = useState(55);
   const [facing, setFacing] = useState('right');
   const [isWalking, setIsWalking] = useState(false);
   const [keysDown, setKeysDown] = useState(new Set());
