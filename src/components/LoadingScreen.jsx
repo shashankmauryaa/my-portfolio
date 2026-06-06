@@ -7,7 +7,7 @@ export default function LoadingScreen({ onComplete }) {
   useEffect(() => {
     let frame;
     let start = null;
-    const duration = 3200;
+    const duration = 2000;
 
     const animate = (timestamp) => {
       if (!start) start = timestamp;
