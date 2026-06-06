@@ -528,17 +528,16 @@ a {
   letter-spacing: -0.5px;
 }
 
-/* 3D Card stack */
 .projects-stack-v2 {
   position: relative;
   width: 100%;
   max-width: 520px;
-  height: 600px;
+  height: 450px;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  padding-bottom: 40px;
-  margin-top: 60px;
+  padding-bottom: 0;
+  margin-top: 0;
   transform-style: preserve-3d;
 }
 

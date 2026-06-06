@@ -131,16 +131,17 @@ export default function ProjectsPage({ onNavigate }) {
       <div className="projects-page-v2">
         {/* Left: Particle text name */}
         <div className="projects-left-panel">
-          <ParticleText text={"SHASHANK\nMAURYA"} width={600} height={400} />
+          {/* <ParticleText text={"SHASHANK\nMAURYA"} width={600} height={400} /> */}
+          <ParticleText text={projects[activeIndex].name.toUpperCase().replace(' ', '\n')} width={600} height={400} />
         </div>
 
         {/* Right: Card stack */}
         <div className="projects-right-panel">
           {/* Title above cards */}
-          <div className="projects-title-area" style={{ opacity: titleOpacity, transform: titleOpacity === 1 ? 'translateY(0)' : 'translateY(15px)', transition: 'all 0.4s ease' }}>
+          {/* <div className="projects-title-area" style={{ opacity: titleOpacity, transform: titleOpacity === 1 ? 'translateY(0)' : 'translateY(15px)', transition: 'all 0.4s ease' }}>
             <p className="projects-label">PROJECTS</p>
             <h1 className="projects-active-title">{projects[activeIndex].name}</h1>
-          </div>
+          </div> */}
 
           {/* 3D Card stack container */}
           <div className="projects-stack-v2">
