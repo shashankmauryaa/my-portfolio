@@ -163,6 +163,12 @@ a {
   text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.08);
 }
 
+.hub-letter {
+  display: inline-block;
+  transition: color 0.2s ease;
+  will-change: transform;
+}
+
 .hub-subtitle {
   font-family: var(--font-pixel);
   font-size: clamp(0.45rem, 1vw, 0.7rem);
@@ -473,7 +479,7 @@ a {
 
 .about-intro {
   font-family: var(--font-body);
-  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-size: clamp(1.4rem, 3.5vw, 1.8rem);
   font-weight: 600;
   color: #555;
   margin-bottom: 12px;
@@ -481,7 +487,7 @@ a {
 
 .about-tagline {
   font-family: var(--font-body);
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2.2rem, 5.5vw, 4rem);
   font-weight: 900;
   color: var(--color-black);
   line-height: 1.15;
@@ -491,7 +497,7 @@ a {
 
 .about-body {
   font-family: var(--font-body);
-  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-size: clamp(1.1rem, 2.2vw, 1.35rem);
   font-weight: 500;
   color: #333;
   line-height: 1.7;
@@ -500,7 +506,7 @@ a {
 
 .about-body-secondary {
   font-family: var(--font-body);
-  font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+  font-size: clamp(1rem, 1.8vw, 1.15rem);
   font-weight: 400;
   color: #666;
   line-height: 1.7;
@@ -899,7 +905,7 @@ a {
 
 .contact-avatar-name {
   font-family: var(--font-pixel);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: var(--color-white);
   letter-spacing: 1px;
 }
@@ -911,8 +917,8 @@ a {
 }
 
 .contact-icon-circle {
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   background: var(--color-white);
   border: 3px solid var(--color-border);
@@ -925,8 +931,8 @@ a {
 }
 
 .contact-icon-circle svg {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
 }
 
 .contact-icon-circle:hover {

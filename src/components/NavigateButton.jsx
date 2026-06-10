@@ -40,7 +40,7 @@ export default function NavigateButton({ onNavigate, currentPage }) {
         navigate
       </button>
       <div className={`navigate-dropdown ${open ? 'open' : ''}`} role="menu">
-        {items.map((item) => (
+        {items.filter((item) => item.page !== currentPage).map((item) => (
           <button
             key={item.page}
             className="navigate-dropdown-item"
