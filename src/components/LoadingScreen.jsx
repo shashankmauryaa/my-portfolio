@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
+import { Canvas } from '@react-three/fiber';
+import Character3D from './Character3D';
 
 export default function LoadingScreen({ onComplete }) {
   const [progress, setProgress] = useState(0);
@@ -39,12 +41,20 @@ export default function LoadingScreen({ onComplete }) {
         />
       </div>
       <p className="loading-percent">{progress}%</p>
-      <img
-        src={`${import.meta.env.BASE_URL}character.png`}
-        alt="Pixel art character of Shashank Maurya"
-        className="loading-character"
-        width="300"
-      />
+      <div className="loading-canvas">
+        <Canvas
+          camera={{ position: [0, 0.2, 2.5], fov: 36 }}
+          gl={{ alpha: true, antialias: true }}
+          style={{ background: 'transparent' }}
+        >
+          <ambientLight intensity={0.8} />
+          <directionalLight position={[3, 5, 4]} intensity={1} />
+          <directionalLight position={[-2, 3, -1]} intensity={0.3} />
+          <Suspense fallback={null}>
+            <Character3D spinning scale={0.5} />
+          </Suspense>
+        </Canvas>
+      </div>
     </div>
   );
 }
