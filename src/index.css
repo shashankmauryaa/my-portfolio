@@ -186,7 +186,7 @@ a {
   position: absolute;
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.12));
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.12));
   border-radius: 12px;
   pointer-events: none;
 }
@@ -204,17 +204,43 @@ a {
 }
 
 @keyframes walkBob {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-6px) rotate(2deg); }
-  50% { transform: translateY(0) rotate(0deg); }
-  75% { transform: translateY(-6px) rotate(-2deg); }
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(-6px) rotate(2deg);
+  }
+
+  50% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  75% {
+    transform: translateY(-6px) rotate(-2deg);
+  }
 }
 
 @keyframes walkBobFlip {
-  0%, 100% { transform: scaleX(-1) translateY(0) rotate(0deg); }
-  25% { transform: scaleX(-1) translateY(-6px) rotate(-2deg); }
-  50% { transform: scaleX(-1) translateY(0) rotate(0deg); }
-  75% { transform: scaleX(-1) translateY(-6px) rotate(2deg); }
+
+  0%,
+  100% {
+    transform: scaleX(-1) translateY(0) rotate(0deg);
+  }
+
+  25% {
+    transform: scaleX(-1) translateY(-6px) rotate(-2deg);
+  }
+
+  50% {
+    transform: scaleX(-1) translateY(0) rotate(0deg);
+  }
+
+  75% {
+    transform: scaleX(-1) translateY(-6px) rotate(2deg);
+  }
 }
 
 .hub-folders {
@@ -239,7 +265,7 @@ a {
 .folder-item:hover,
 .folder-item:focus-visible {
   transform: translateY(-8px) scale(1.05);
-  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.15));
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
 }
 
 .folder-item:active {
@@ -252,7 +278,7 @@ a {
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   border-radius: 8px;
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.1));
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.1));
 }
 
 .folder-label {
@@ -277,8 +303,15 @@ a {
 }
 
 @keyframes pulse-text {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 /* =========================================================
@@ -382,6 +415,7 @@ a {
     opacity: 0;
     transform: translateX(60px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -398,8 +432,13 @@ a {
 }
 
 @keyframes wipeIn {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 .page-transition-overlay.wipe-out {
@@ -407,8 +446,13 @@ a {
 }
 
 @keyframes wipeOut {
-  from { transform: translateX(0); }
-  to { transform: translateX(100%); }
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
 }
 
 /* =========================================================
@@ -549,7 +593,6 @@ a {
   justify-content: center;
   align-items: flex-end;
   transform: rotateX(18deg);
-  transform-style: preserve-3d;
 }
 
 .project-card-v2 {
@@ -561,7 +604,6 @@ a {
   overflow: hidden;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   transform-origin: bottom center;
-  transform-style: preserve-3d;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -605,7 +647,7 @@ a {
   font-family: var(--font-pixel);
   font-size: clamp(0.7rem, 1.2vw, 1rem);
   color: white;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.6), 0 0 4px rgba(0,0,0,0.3);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6), 0 0 4px rgba(0, 0, 0, 0.3);
   letter-spacing: 2px;
   text-align: center;
   text-transform: uppercase;
@@ -623,11 +665,11 @@ a {
   font-size: 0.65rem;
   font-weight: 500;
   padding: 4px 10px;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(4px);
   border-radius: 20px;
   color: white;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .project-card-v2-overlay {
@@ -713,8 +755,13 @@ a {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .project-modal {
@@ -730,8 +777,13 @@ a {
 }
 
 @keyframes slideInRight {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 .modal-close {

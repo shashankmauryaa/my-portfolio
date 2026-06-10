@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import NavigateButton from './NavigateButton';
 import ProjectModal from './ProjectModal';
 import ParticleText from './ParticleText';
@@ -45,6 +45,23 @@ export default function ProjectsPage({ onNavigate }) {
   const [modal, setModal] = useState(null);
   const [titleOpacity, setTitleOpacity] = useState(0);
   const [scrollCooldown, setScrollCooldown] = useState(false);
+  const [targetIndex, setTargetIndex] = useState(null);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const scrollTimerRef = useRef(null);
+
+  // Auto-scroll: step one card at a time towards targetIndex
+  useEffect(() => {
+    if (targetIndex === null || targetIndex === activeIndex) {
+      setTargetIndex(null);
+      return;
+    }
+    scrollTimerRef.current = setTimeout(() => {
+      const forwardDist = (targetIndex - activeIndex + N) % N;
+      const dir = forwardDist <= N / 2 ? 1 : -1;
+      setActiveIndex((prev) => (prev + dir + N) % N);
+    }, 200);
+    return () => clearTimeout(scrollTimerRef.current);
+  }, [activeIndex, targetIndex]);
 
   // Animate title in
   useEffect(() => {
@@ -67,6 +84,7 @@ export default function ProjectsPage({ onNavigate }) {
 
     setScrollCooldown(true);
     setTimeout(() => setScrollCooldown(false), 500);
+    setTargetIndex(null); // cancel any auto-scroll on manual wheel
 
     if (delta > 0) {
       setActiveIndex((prev) => (prev + 1) % N);
@@ -83,15 +101,19 @@ export default function ProjectsPage({ onNavigate }) {
 
   const getCardStyle = (index) => {
     const diff = getCircularDiff(index);
+    const isHovered = hoveredIndex === index;
 
     if (diff === 0) {
-      // Active card — front and center
+      // Active card — front and center, with hover lift
       return {
         opacity: 1,
         zIndex: N + 1,
-        transform: 'none',
+        transform: isHovered ? 'translateY(-8px) scale(1.02)' : 'none',
         pointerEvents: 'auto',
-        cursor: 'default',
+        cursor: 'pointer',
+        boxShadow: isHovered
+          ? '0 35px 60px -12px rgba(0, 0, 0, 0.35)'
+          : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
       };
     }
 
@@ -100,29 +122,67 @@ export default function ProjectsPage({ onNavigate }) {
       return {
         opacity: 0,
         zIndex: 0,
-        transform: `translateY(${-60 * 4}px) translateZ(${-40 * 4}px) scale(${1 - 0.035 * 4})`,
+        transform: `translateY(${-60 * 4}px) scale(${1 - 0.035 * 4})`,
         pointerEvents: 'none',
       };
     }
 
-    // Cards behind — stacked upward with perspective
+    // Cards behind — stacked upward, with hover pop
+    const baseY = -60 * diff;
+    const hoverExtra = isHovered ? -20 : 0;
     return {
       opacity: 1,
       zIndex: N + 1 - diff,
-      transform: `translateY(${-60 * diff}px) translateZ(${-40 * diff}px) scale(${1 - 0.035 * diff}) rotateX(${-5 * diff}deg)`,
+      transform: `translateY(${baseY + hoverExtra}px) scale(${1 - 0.035 * diff + (isHovered ? 0.02 : 0)}) rotateX(${-5 * diff}deg)`,
       pointerEvents: 'auto',
       cursor: 'pointer',
+      boxShadow: isHovered
+        ? '0 35px 60px -12px rgba(0, 0, 0, 0.4)'
+        : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+      filter: isHovered ? 'brightness(1.1)' : 'none',
     };
   };
 
-  // Clicking a non-active card brings it to front
-  const handleCardClick = (index) => {
-    if (index === activeIndex) {
-      setModal(projects[index]);
-    } else {
-      setActiveIndex(index);
+  const cardRefs = useRef([]);
+
+  // Container-level hover detection using card bounding rects.
+  // Checks from front to back — the active card matches first in
+  // the overlap zone. Background cards only match when cursor is
+  // in their exclusive exposed strip above the front cards.
+  const handleStackMouseMove = useCallback((e) => {
+    const mouseY = e.clientY;
+    const mouseX = e.clientX;
+    let found = null;
+
+    // Check from front (diff=0) to back (diff=3)
+    for (let diff = 0; diff <= Math.min(3, N - 1); diff++) {
+      const idx = (activeIndex + diff) % N;
+      const el = cardRefs.current[idx];
+      if (!el) continue;
+      const rect = el.getBoundingClientRect();
+      if (mouseX >= rect.left && mouseX <= rect.right &&
+          mouseY >= rect.top && mouseY <= rect.bottom) {
+        found = idx;
+        break; // first match wins — front card takes priority in overlap
+      }
     }
-  };
+
+    setHoveredIndex(found);
+  }, [activeIndex]);
+
+  const handleStackMouseLeave = useCallback(() => {
+    setHoveredIndex(null);
+  }, []);
+
+  // Click uses hoveredIndex — works even in the overlap zone
+  const handlePanelClick = useCallback(() => {
+    if (hoveredIndex === null) return;
+    if (hoveredIndex === activeIndex) {
+      setModal(projects[hoveredIndex]);
+    } else {
+      setTargetIndex(hoveredIndex);
+    }
+  }, [hoveredIndex, activeIndex]);
 
   return (
     <div className="page-container page-enter dot-grid-bg" onWheel={handleScroll}>
@@ -136,7 +196,12 @@ export default function ProjectsPage({ onNavigate }) {
         </div>
 
         {/* Right: Card stack */}
-        <div className="projects-right-panel">
+        <div
+          className="projects-right-panel"
+          onMouseMove={handleStackMouseMove}
+          onMouseLeave={handleStackMouseLeave}
+          onClick={handlePanelClick}
+        >
           {/* Title above cards */}
           {/* <div className="projects-title-area" style={{ opacity: titleOpacity, transform: titleOpacity === 1 ? 'translateY(0)' : 'translateY(15px)', transition: 'all 0.4s ease' }}>
             <p className="projects-label">PROJECTS</p>
@@ -149,13 +214,14 @@ export default function ProjectsPage({ onNavigate }) {
               {projects.map((project, i) => (
                 <div
                   key={project.name}
+                  ref={(el) => { cardRefs.current[i] = el; }}
                   className={`project-card-v2 ${i === activeIndex ? 'active' : ''}`}
+                  data-card-index={i}
                   style={{
                     ...getCardStyle(i),
                     backgroundColor: project.color,
-                    transition: 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)',
+                    transition: 'all 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
                   }}
-                  onClick={() => handleCardClick(i)}
                 >
                   {/* Background image */}
                   {project.image && (
@@ -196,7 +262,7 @@ export default function ProjectsPage({ onNavigate }) {
                 <button
                   key={i}
                   className={`project-dot-v2 ${i === activeIndex ? 'active' : ''}`}
-                  onClick={() => setActiveIndex(i)}
+                  onClick={() => setTargetIndex(i)}
                   aria-label={`View project ${i + 1}`}
                   type="button"
                 />
