@@ -7,32 +7,19 @@ import ContactPage from './components/ContactPage';
 
 export default function App() {
   const [page, setPage] = useState('loading');
-  const [transitioning, setTransitioning] = useState(false);
+  const [targetPage, setTargetPage] = useState('hub');
 
   const handleLoadingComplete = useCallback(() => {
-    setPage('hub');
-  }, []);
+    setPage(targetPage);
+  }, [targetPage]);
 
   const handleNavigate = useCallback((target) => {
-    if (transitioning) return;
-    setTransitioning(true);
-
-    // Brief transition overlay
-    setTimeout(() => {
-      setPage(target);
-      setTimeout(() => {
-        setTransitioning(false);
-      }, 100);
-    }, 300);
-  }, [transitioning]);
+    setTargetPage(target);
+    setPage('loading');
+  }, []);
 
   return (
     <>
-      {/* Page transition overlay */}
-      {transitioning && (
-        <div className="page-transition-overlay" />
-      )}
-
       {page === 'loading' && (
         <LoadingScreen onComplete={handleLoadingComplete} />
       )}
