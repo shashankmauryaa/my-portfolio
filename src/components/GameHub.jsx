@@ -17,15 +17,36 @@ export default function GameHub({ onNavigate }) {
   const folderRefs = useRef([]);
   const charRef = useRef(null);
   const navigatedRef = useRef(false);
+  const interactProgressRef = useRef(0);
+  const interactingFolderRef = useRef(null);
+  const [fillState, setFillState] = useState({ id: null, pct: 0 });
   const letterRefs = useRef([]);
   const letterPhysics = useRef(
     TITLE_TEXT.split('').map(() => ({ vx: 0, vy: 0, dx: 0, dy: 0 }))
   );
 
   const folders = [
-    { id: 'about', icon: `${import.meta.env.BASE_URL}folder-blue.png`, label: 'About Me' },
-    { id: 'projects', icon: `${import.meta.env.BASE_URL}folder-red.png`, label: 'Projects' },
-    { id: 'contact', icon: `${import.meta.env.BASE_URL}folder-yellow.png`, label: 'Contact Me' },
+    { 
+      id: 'about', 
+      icon: `${import.meta.env.BASE_URL}folder-blue.png`, 
+      label: 'About Me',
+      color: '#4facfe', // Bright Blue
+      filter: 'none'
+    },
+    { 
+      id: 'projects', 
+      icon: `${import.meta.env.BASE_URL}folder-blue.png`, 
+      label: 'Projects',
+      color: '#ff4b4b', // Bright Red
+      filter: 'hue-rotate(150deg) saturate(1.5)'
+    },
+    { 
+      id: 'contact', 
+      icon: `${import.meta.env.BASE_URL}folder-blue.png`, 
+      label: 'Contact Me',
+      color: '#ffa500', // Orange/Yellow
+      filter: 'hue-rotate(185deg) saturate(1.2)'
+    },
   ];
 
   const moveSpeed = 5;
@@ -55,13 +76,11 @@ export default function GameHub({ onNavigate }) {
     };
   }, []);
 
-  // Check folder proximity
-  const checkProximity = useCallback(() => {
-    if (navigatedRef.current || !charRef.current) return;
-    const charRect = charRef.current.getBoundingClientRect();
-    const charCenterX = charRect.left + charRect.width / 2;
-    const charCenterY = charRect.top + charRect.height / 2;
-
+  // Continuous proximity logic for filling up folders
+  const updateProximity = useCallback((charCenterX, charCenterY) => {
+    if (navigatedRef.current) return;
+    
+    let currentFolder = null;
     for (let i = 0; i < folderRefs.current.length; i++) {
       const el = folderRefs.current[i];
       if (!el) continue;
@@ -71,12 +90,36 @@ export default function GameHub({ onNavigate }) {
       const dist = Math.hypot(charCenterX - folderCenterX, charCenterY - folderCenterY);
 
       if (dist < 100) {
-        navigatedRef.current = true;
-        onNavigate(folders[i].id);
-        return;
+        currentFolder = folders[i].id;
+        break;
       }
     }
-  }, [onNavigate, folders]);
+
+    if (currentFolder) {
+      if (interactingFolderRef.current !== currentFolder) {
+        interactingFolderRef.current = currentFolder;
+        interactProgressRef.current = 0;
+      }
+      interactProgressRef.current += 1.5; // ~60fps, fills in ~1.1s
+      if (interactProgressRef.current >= 100) {
+        navigatedRef.current = true;
+        onNavigate(currentFolder);
+      }
+    } else {
+      if (interactProgressRef.current > 0) {
+        interactProgressRef.current -= 3; // shrink faster when leaving
+        if (interactProgressRef.current <= 0) {
+          interactProgressRef.current = 0;
+          interactingFolderRef.current = null;
+        }
+      }
+    }
+
+    setFillState({
+      id: interactingFolderRef.current,
+      pct: interactProgressRef.current
+    });
+  }, [folders, onNavigate]);
 
   // Repel letters from character
   const updateLetterPhysics = useCallback((cx, cy) => {
@@ -140,27 +183,29 @@ export default function GameHub({ onNavigate }) {
         return Math.max(60, Math.min(window.innerHeight - 60, next));
       });
 
-      checkProximity();
       frame = requestAnimationFrame(step);
     };
 
     frame = requestAnimationFrame(step);
     return () => cancelAnimationFrame(frame);
-  }, [keysDown, checkProximity]);
+  }, [keysDown]);
 
-  // Continuous letter physics loop
+  // Continuous physics and proximity loop
   useEffect(() => {
     let frame;
     const animate = () => {
       if (charRef.current) {
         const rect = charRef.current.getBoundingClientRect();
-        updateLetterPhysics(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        updateLetterPhysics(cx, cy);
+        updateProximity(cx, cy);
       }
       frame = requestAnimationFrame(animate);
     };
     frame = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(frame);
-  }, [updateLetterPhysics]);
+  }, [updateLetterPhysics, updateProximity]);
 
   const handleFolderClick = useCallback((page) => {
     onNavigate(page);
@@ -213,12 +258,20 @@ export default function GameHub({ onNavigate }) {
             aria-label={`Open ${folder.label}`}
             onKeyDown={(e) => { if (e.key === 'Enter') handleFolderClick(folder.id); }}
           >
-            <img
-              src={folder.icon}
-              alt={`${folder.label} folder`}
-              className="folder-icon"
-            />
-            <span className="folder-label">{folder.label}</span>
+            <div className="folder-icon-wrapper">
+              <img
+                src={folder.icon}
+                alt={`${folder.label} folder`}
+                className="folder-icon"
+                style={{ filter: folder.filter }}
+              />
+              {fillState.id === folder.id && fillState.pct > 0 && (
+                <div className="folder-fill-container" style={{ height: `${Math.min(100, fillState.pct)}%` }}>
+                  <img src={folder.icon} className="folder-icon-green" alt="" />
+                </div>
+              )}
+            </div>
+            <span className="folder-label" style={{ color: folder.color }}>{folder.label}</span>
           </div>
         ))}
       </div>

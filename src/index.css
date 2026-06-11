@@ -202,20 +202,21 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   cursor: pointer;
-  transition: transform var(--transition), filter var(--transition);
-  outline: none;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .folder-item:hover,
-.folder-item:focus-visible {
-  transform: translateY(-10px) scale(1.08);
-  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.18));
+.folder-item:focus {
+  transform: translateY(-8px) scale(1.05);
+  outline: none;
 }
 
-.folder-item:active {
-  transform: translateY(0) scale(0.97);
+.folder-icon-wrapper {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
 }
 
 .folder-icon {
@@ -225,6 +226,27 @@ a {
   image-rendering: -moz-crisp-edges;
   border-radius: 8px;
   filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.12));
+}
+
+.folder-fill-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.folder-icon-green {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  /* Use sepia as a base to reliably rotate to exactly #3cb043 (var(--color-green)) */
+  filter: sepia(1) hue-rotate(83deg) saturate(3.5) brightness(0.85);
 }
 
 .folder-label {
