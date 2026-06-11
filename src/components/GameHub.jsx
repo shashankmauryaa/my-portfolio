@@ -28,21 +28,21 @@ export default function GameHub({ onNavigate }) {
   const folders = [
     { 
       id: 'about', 
-      icon: `${import.meta.env.BASE_URL}folder-blue.png`, 
+      icon: `${import.meta.env.BASE_URL}folder.png`, 
       label: 'About Me',
       color: '#4facfe', // Bright Blue
       filter: 'none'
     },
     { 
       id: 'projects', 
-      icon: `${import.meta.env.BASE_URL}folder-blue.png`, 
+      icon: `${import.meta.env.BASE_URL}folder.png`, 
       label: 'Projects',
       color: '#ff4b4b', // Bright Red
       filter: 'hue-rotate(150deg) saturate(1.5)'
     },
     { 
       id: 'contact', 
-      icon: `${import.meta.env.BASE_URL}folder-blue.png`, 
+      icon: `${import.meta.env.BASE_URL}folder.png`, 
       label: 'Contact Me',
       color: '#ffa500', // Orange/Yellow
       filter: 'hue-rotate(185deg) saturate(1.2)'
