@@ -8,6 +8,12 @@ const REPEL_FORCE = 12;
 const SPRING = 0.08;
 const DAMPING = 0.85;
 
+const TITLE_TEXT = 'SHASHANK MAURYA';
+const REPEL_RADIUS = 120;
+const REPEL_FORCE = 12;
+const SPRING = 0.08;
+const DAMPING = 0.85;
+
 export default function GameHub({ onNavigate }) {
   const [charX, setCharX] = useState(window.innerWidth / 2);
   const [charY, setCharY] = useState(160);
