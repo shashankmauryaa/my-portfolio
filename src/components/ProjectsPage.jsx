@@ -29,12 +29,12 @@ const projects = [
     image: 'particle-sphere.png',
   },
   {
-    name: 'This Portfolio',
-    desc: 'The very portfolio you are viewing — a video-game-style interactive experience built with React, featuring pixel art, keyboard navigation, and neo-brutalist design.',
+    name: 'Estates',
+    desc: 'Real Estate Platform to Buy, Rent & Sell Properties',
     tech: ['React', 'Vite', 'CSS3', 'Canvas'],
-    link: 'https://shashankmauryaa.github.io/my-portfolio',
-    color: '#F59E0B',
-    image: 'portfolio.png',
+    link: 'https://shashankmauryaa.github.io/estates',
+    color: '#257754',
+    image: 'estates.png',
   },
 ];
 
