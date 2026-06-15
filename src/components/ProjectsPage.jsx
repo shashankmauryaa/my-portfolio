@@ -29,11 +29,19 @@ const projects = [
     image: 'particle-sphere.png',
   },
   {
+    name: 'This Portfolio',
+    desc: 'The very portfolio you are viewing — a video-game-style interactive experience built with React, featuring pixel art, keyboard navigation, and neo-brutalist design.',
+    tech: ['React', 'Vite', 'CSS3', 'Canvas'],
+    link: 'https://shashankmauryaa.github.io/my-portfolio',
+    color: '#F59E0B',
+    image: 'portfolio.png',
+  },
+  {
     name: 'Estates',
     desc: 'Real Estate Platform to Buy, Rent & Sell Properties',
     tech: ['React', 'Vite', 'CSS3', 'Canvas'],
     link: 'https://shashankmauryaa.github.io/estates',
-    color: '#257754',
+    color: '#07ebf7ff',
     image: 'estates.png',
   },
 ];
@@ -117,15 +125,8 @@ export default function ProjectsPage({ onNavigate }) {
       };
     }
 
-    // Only show up to 3 cards stacked behind
-    if (diff > 3) {
-      return {
-        opacity: 0,
-        zIndex: 0,
-        transform: `translateY(${-60 * 4}px) scale(${1 - 0.035 * 4})`,
-        pointerEvents: 'none',
-      };
-    }
+    // Dynamic stack - all cards behind will be displayed and stacked automatically.
+    // No hardcoded limit means any new cards added to the array will just stack.
 
     // Cards behind — stacked upward, with hover pop
     const baseY = -60 * diff;
@@ -154,8 +155,8 @@ export default function ProjectsPage({ onNavigate }) {
     const mouseX = e.clientX;
     let found = null;
 
-    // Check from front (diff=0) to back (diff=3)
-    for (let diff = 0; diff <= Math.min(3, N - 1); diff++) {
+    // Dynamically check from front (diff=0) to the very back (diff=N-1)
+    for (let diff = 0; diff <= N - 1; diff++) {
       const idx = (activeIndex + diff) % N;
       const el = cardRefs.current[idx];
       if (!el) continue;
