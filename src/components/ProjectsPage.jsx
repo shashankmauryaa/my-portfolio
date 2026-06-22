@@ -60,10 +60,11 @@ export default function ProjectsPage({ onNavigate }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [modal, setModal] = useState(null);
   const [titleOpacity, setTitleOpacity] = useState(0);
-  const [scrollCooldown, setScrollCooldown] = useState(false);
   const [targetIndex, setTargetIndex] = useState(null);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const scrollTimerRef = useRef(null);
+  const scrollAccumulator = useRef(0);
+  const scrollTimeoutRef = useRef(null);
 
   // Auto-scroll: step one card at a time towards targetIndex
   useEffect(() => {
@@ -92,22 +93,29 @@ export default function ProjectsPage({ onNavigate }) {
     return () => clearTimeout(timer);
   }, [activeIndex]);
 
-  // Infinite scroll — wraps around both directions
+  // Infinite scroll — multiple steps based on scroll speed
   const handleScroll = useCallback((e) => {
-    if (scrollCooldown) return;
-    const delta = e.deltaY;
-    if (Math.abs(delta) < 15) return;
+    scrollAccumulator.current += e.deltaY;
+    const threshold = 80; // slightly less than 100 to ensure consistent single-ticks
 
-    setScrollCooldown(true);
-    setTimeout(() => setScrollCooldown(false), 500);
-    setTargetIndex(null); // cancel any auto-scroll on manual wheel
+    if (Math.abs(scrollAccumulator.current) >= threshold) {
+      const steps = Math.floor(Math.abs(scrollAccumulator.current) / threshold);
+      const sign = Math.sign(scrollAccumulator.current);
+      
+      setActiveIndex((prev) => {
+        let next = prev + (sign * steps);
+        return ((next % N) + N) % N;
+      });
 
-    if (delta > 0) {
-      setActiveIndex((prev) => (prev + 1) % N);
-    } else if (delta < 0) {
-      setActiveIndex((prev) => (prev - 1 + N) % N);
+      scrollAccumulator.current -= sign * steps * threshold;
+      setTargetIndex(null); // cancel any auto-scroll on manual wheel
     }
-  }, [scrollCooldown]);
+
+    clearTimeout(scrollTimeoutRef.current);
+    scrollTimeoutRef.current = setTimeout(() => {
+      scrollAccumulator.current = 0;
+    }, 250);
+  }, []);
 
   // Calculate shortest circular distance from activeIndex to a given index
   const getCircularDiff = (index) => {
@@ -137,12 +145,18 @@ export default function ProjectsPage({ onNavigate }) {
     // No hardcoded limit means any new cards added to the array will just stack.
 
     // Cards behind — stacked upward, with hover pop
-    const baseY = -60 * diff;
+    // Interpolate spacing to ensure all cards fit within a maximum stack depth
+    const yStep = Math.min(60, 300 / Math.max(1, N - 1));
+    const rotateStep = Math.min(5, 25 / Math.max(1, N - 1));
+    const scaleStep = Math.min(0.035, 0.175 / Math.max(1, N - 1));
+
+    const baseY = -yStep * diff;
     const hoverExtra = isHovered ? -20 : 0;
+    
     return {
       opacity: 1,
       zIndex: N + 1 - diff,
-      transform: `translateY(${baseY + hoverExtra}px) scale(${1 - 0.035 * diff + (isHovered ? 0.02 : 0)}) rotateX(${-5 * diff}deg)`,
+      transform: `translateY(${baseY + hoverExtra}px) scale(${1 - scaleStep * diff + (isHovered ? 0.02 : 0)}) rotateX(${-rotateStep * diff}deg)`,
       pointerEvents: 'auto',
       cursor: 'pointer',
       boxShadow: isHovered
