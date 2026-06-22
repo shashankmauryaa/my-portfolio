@@ -5,20 +5,20 @@ import ParticleText from './ParticleText';
 
 const projects = [
   {
-    name: 'Lazy Auctions',
-    desc: 'A full-stack auction platform with real-time bidding, user authentication, and payment integration. Built for seamless online auction experiences.',
-    tech: ['React', 'Node.js', 'MongoDB', 'Socket.io'],
-    link: 'https://shashankmauryaa.github.io/LazyAuctions/',
-    color: '#6C63FF',
-    image: 'auctions.png',
-  },
-  {
     name: 'Strategos',
     desc: 'A strategy-based application featuring intelligent decision-making algorithms and interactive gameplay mechanics.',
     tech: ['Python', 'Flask', 'TensorFlow', 'React'],
     link: 'https://shashankmauryaa.github.io/strategos/',
     color: '#FF6B6B',
     image: 'strategos-gemini.png',
+  },
+  {
+    name: 'Kintsugi Wellness',
+    desc: 'A web application for booking therapy sessions, featuring a calendar, time slot selection, and payment integration.',
+    tech: ['Next.js', 'Tailwind CSS'],
+    link: 'https://kintsugi-wellness.vercel.app/portal',
+    color: '#e5f412ff',
+    image: 'kintsugi-vase.png',
   },
   {
     name: 'Particle Sphere',
@@ -29,12 +29,12 @@ const projects = [
     image: 'particle-sphere.png',
   },
   {
-    name: 'This Portfolio',
-    desc: 'The very portfolio you are viewing — a video-game-style interactive experience built with React, featuring pixel art, keyboard navigation, and neo-brutalist design.',
-    tech: ['React', 'Vite', 'CSS3', 'Canvas'],
-    link: 'https://shashankmauryaa.github.io/my-portfolio',
-    color: '#F59E0B',
-    image: 'portfolio.png',
+    name: 'Lazy Auctions',
+    desc: 'A full-stack auction platform with real-time bidding, user authentication, and payment integration. Built for seamless online auction experiences.',
+    tech: ['React', 'Node.js', 'MongoDB', 'Socket.io'],
+    link: 'https://shashankmauryaa.github.io/LazyAuctions/',
+    color: '#6C63FF',
+    image: 'auctions.png',
   },
   {
     name: 'Estates',
@@ -43,6 +43,14 @@ const projects = [
     link: 'https://shashankmauryaa.github.io/estates',
     color: '#07ebf7ff',
     image: 'estates.png',
+  },
+  {
+    name: 'This Portfolio',
+    desc: 'The very portfolio you are viewing — a video-game-style interactive experience built with React, featuring pixel art, keyboard navigation, and neo-brutalist design.',
+    tech: ['React', 'Vite', 'CSS3', 'Canvas'],
+    link: 'https://shashankmauryaa.github.io/my-portfolio',
+    color: '#F59E0B',
+    image: 'portfolio.png',
   },
 ];
 
